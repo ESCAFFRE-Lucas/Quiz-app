@@ -7,6 +7,12 @@ export interface Question {
     correct_answer: string;
 }
 
+export interface UserAnswer {
+    question: string;
+    answer: string;
+    correct: boolean;
+}
+
 export interface QuizResponse {
     response_code: number;
     results: Question[];

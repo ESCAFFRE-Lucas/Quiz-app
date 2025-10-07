@@ -1,6 +1,22 @@
 import { NextResponse } from "next/server";
 import he from "he";
 
+let sessionToken: string | null = null;
+
+async function getSessionToken(): Promise<string | null> {
+    if (sessionToken) return sessionToken;
+
+    const response = await fetch("https://opentdb.com/api_token.php?command=request");
+    const data = await response.json();
+
+    if (data.response_code === 0) {
+        sessionToken = data.token;
+        return sessionToken;
+    }
+
+    throw new Error("Failed to get session token");
+}
+
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -8,7 +24,10 @@ export async function GET(request: Request) {
         const difficulty = searchParams.get("difficulty") || "easy";
         const amount = searchParams.get("amount") || "10";
 
-        const apiUrl = `https://opentdb.com/api.php?amount=${amount}&category=${category}&difficulty=${difficulty}&type=multiple`;
+        const token = await getSessionToken();
+
+        const apiUrl = `https://opentdb.com/api.php?amount=${amount}&category=${category}&difficulty=${difficulty}&type=multiple&token=${token}`;
+
         const apiResponse = await fetch(apiUrl);
 
         if (!apiResponse.ok) {
@@ -21,6 +40,10 @@ export async function GET(request: Request) {
         const data = await apiResponse.json();
 
         if (data.response_code !== 0) {
+            if (data.response_code === 4) {
+                sessionToken = null;
+            }
+
             return NextResponse.json(
                 { error: "Pas de questions disponibles pour cette catégorie" },
                 { status: 404 }
