@@ -9,9 +9,10 @@ interface AnswerButtonProps {
     isSelected: boolean
     onClick: () => void
     index: number
+    disabled?: boolean
 }
 
-export function AnswerButton({ answer, isSelected, onClick, index }: AnswerButtonProps) {
+export function AnswerButton({ answer, isSelected, onClick, index, disabled }: AnswerButtonProps) {
     const [isHovered, setIsHovered] = useState(false)
 
     const letters = ["A", "B", "C", "D"]
@@ -39,10 +40,10 @@ export function AnswerButton({ answer, isSelected, onClick, index }: AnswerButto
                 isHovered && !isSelected && "scale-[1.02] shadow-lg",
             )}
             onClick={onClick}
+            disabled={disabled}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {/* Letter badge */}
             <div
                 className={cn(
                     "flex items-center justify-center w-10 h-10 rounded-lg font-bold text-lg transition-all duration-300",
@@ -52,7 +53,6 @@ export function AnswerButton({ answer, isSelected, onClick, index }: AnswerButto
                 {letters[index % 4]}
             </div>
 
-            {/* Answer text */}
             <span
                 className={cn(
                     "flex-1 text-base md:text-lg font-medium leading-relaxed",
@@ -61,8 +61,6 @@ export function AnswerButton({ answer, isSelected, onClick, index }: AnswerButto
             >
         {answer}
       </span>
-
-            {/* Selection indicator */}
             {isSelected && (
                 <div className="absolute right-4 top-1/2 -translate-y-1/2">
                     <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">

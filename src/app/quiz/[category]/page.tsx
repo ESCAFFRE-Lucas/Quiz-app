@@ -23,6 +23,7 @@ export default function QuizPage({ params }: { params: Promise<{ category: strin
     const [showScore, setShowScore] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const [isTransitioning, setIsTransitioning] = useState(false)
 
     useEffect(() => {
         async function fetchQuestions() {
@@ -44,18 +45,17 @@ export default function QuizPage({ params }: { params: Promise<{ category: strin
 
 
     const handleAnswerClick = (answer: string) => {
-        setSelectedAnswer(answer)
-    }
+        if (isTransitioning) return;
 
-    const handleNext = () => {
-        if (!selectedAnswer) return
+        setSelectedAnswer(answer)
+        setIsTransitioning(true)
 
         const currentQuestion = questions[currentQuestionIndex]
-        const isCorrect = selectedAnswer === currentQuestion.correctAnswer
+        const isCorrect = answer === currentQuestion.correctAnswer
 
         const newAnswer: UserAnswer = {
             question: currentQuestion.question,
-            answer: selectedAnswer,
+            answer: answer,
             correct: isCorrect,
             correctAnswer: currentQuestion.correctAnswer
         };
@@ -63,13 +63,16 @@ export default function QuizPage({ params }: { params: Promise<{ category: strin
         const updatedAnswers = [...userAnswers, newAnswer];
         setUserAnswers(updatedAnswers);
 
-        setSelectedAnswer(null)
+        setTimeout(() => {
+            setSelectedAnswer(null)
+            setIsTransitioning(false)
 
-        if (currentQuestionIndex === questions.length - 1) {
-            setShowScore(true)
-        } else {
-            setCurrentQuestionIndex(currentQuestionIndex + 1)
-        }
+            if (currentQuestionIndex === questions.length - 1) {
+                setShowScore(true)
+            } else {
+                setCurrentQuestionIndex(currentQuestionIndex + 1)
+            }
+        }, 100)
     }
 
     const calculateScore = () => {
@@ -149,31 +152,16 @@ export default function QuizPage({ params }: { params: Promise<{ category: strin
                             isSelected={selectedAnswer === answer}
                             onClick={() => handleAnswerClick(answer)}
                             index={index}
+                            disabled={isTransitioning}
                         />
                     ))}
                 </div>
 
-                <div className="flex justify-end pt-4">
-                    <Button
-                        onClick={handleNext}
-                        disabled={!selectedAnswer}
-                        size="lg"
-                        className="text-lg px-8 transition-all duration-300 disabled:opacity-50"
-                    >
-                        {currentQuestionIndex === questions.length - 1 ? "Terminer" : "Suivant"}
-                        <svg
-                            className="w-5 h-5 ml-2"
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                    </Button>
-                </div>
+                {isTransitioning && (
+                    <div className="text-center text-muted-foreground animate-pulse">
+                        Passage à la question suivante...
+                    </div>
+                )}
             </div>
         </div>
     )

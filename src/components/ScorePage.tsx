@@ -83,7 +83,6 @@ export function ScorePage({
     return (
         <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 py-12 px-4">
             <div className="max-w-4xl mx-auto space-y-8">
-                {/* Score card */}
                 <Card className="relative overflow-hidden border-2 border-border/50 bg-card/80 backdrop-blur-sm">
                     <div
                         className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10"/>
@@ -98,7 +97,6 @@ export function ScorePage({
                             <p className="text-xl text-muted-foreground">Score: {percentage}%</p>
                         </div>
 
-                        {/* Progress circle */}
                         <div className="flex justify-center pt-4">
                             <div className="relative w-32 h-32">
                                 <svg className="transform -rotate-90 w-32 h-32">
@@ -134,14 +132,18 @@ export function ScorePage({
                             <Button asChild size="lg" className="text-lg">
                                 <Link href="/">Retour à l&#39;accueil</Link>
                             </Button>
-                            <Button asChild size="lg" variant="outline" className="text-lg bg-transparent">
-                                <Link href={window.location.pathname}>Recommencer</Link>
+                            <Button
+                                size="lg"
+                                variant="outline"
+                                className="text-lg bg-transparent"
+                                onClick={() => window.location.reload()}
+                            >
+                                Recommencer
                             </Button>
                         </div>
                     </div>
                 </Card>
 
-                {/* Detailed results */}
                 <div className="space-y-4">
                     <h2 className="text-2xl font-bold text-foreground">Détails des réponses</h2>
 
