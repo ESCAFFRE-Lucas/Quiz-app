@@ -29,7 +29,7 @@ export default async function LeaderboardPage() {
 
                         <div className="flex justify-center gap-4 pt-4">
                             <Button asChild variant="outline">
-                                <Link href="/">Jouer un quiz</Link>
+                                <Link href="/public">Jouer un quiz</Link>
                             </Button>
                             {session && (
                                 <Button asChild>

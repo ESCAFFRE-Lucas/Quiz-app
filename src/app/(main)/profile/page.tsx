@@ -37,14 +37,6 @@ export default async function ProfilePage() {
                             </h1>
                             <p className="text-muted-foreground">{session.user.email}</p>
                         </div>
-                        <div className="flex gap-2">
-                            <Button asChild variant="outline">
-                                <Link href="/">Accueil</Link>
-                            </Button>
-                            <Button asChild variant="outline">
-                                <Link href="/leaderboard">🏆 Classement</Link>
-                            </Button>
-                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">

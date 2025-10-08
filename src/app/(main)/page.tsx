@@ -25,12 +25,6 @@ export default async function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-background to-accent/10"/>
 
                 <div className="relative container mx-auto px-4 py-20 md:py-32">
-                    <div className="absolute top-4 right-4">
-                        <Button asChild variant="outline" className="mr-4">
-                            <Link href="/profile">Mon Profil</Link>
-                        </Button>
-                        <LogoutButton />
-                    </div>
                     <div className="max-w-4xl mx-auto text-center space-y-6">
                         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-balance text-foreground">
                             Bonjour {session.user.name || session.user.email}!
