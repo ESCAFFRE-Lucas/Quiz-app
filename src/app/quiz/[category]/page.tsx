@@ -10,7 +10,9 @@ import { Loader2 } from "lucide-react"
 import Link from "next/link";
 import { QUIZ_CATEGORIES } from "@/lib/categories";
 import { fetchQuizQuestions } from "@/actions/quiz";
-
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/lib/auth";
+import {redirect} from "next/navigation";
 
 export default function QuizPage({ params }: { params: Promise<{ category: string }> }) {
     const { category } = use(params)
@@ -42,6 +44,7 @@ export default function QuizPage({ params }: { params: Promise<{ category: strin
 
         fetchQuestions();
     }, [category])
+
 
     const handleAnswerClick = (answer: string) => {
         setSelectedAnswer(answer)

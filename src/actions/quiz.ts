@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import he from "he";
+import {revalidatePath} from "next/cache";
 
 let sessionToken: string | null = null;
 
@@ -114,6 +115,8 @@ export async function saveQuizResults(
                 answers: true
             }
         });
+
+        revalidatePath("/profile");
 
         return {
             success: true,

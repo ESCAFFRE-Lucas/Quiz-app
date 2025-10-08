@@ -30,6 +30,8 @@ export default function LoginPage() {
                 password,
             })
 
+            console.log(result)
+
             if (result?.error) {
                 setError(result.error)
             } else if (result?.ok) {
