@@ -38,6 +38,11 @@ export default async function HomePage() {
                         <p className="text-xl md:text-2xl text-muted-foreground text-pretty max-w-2xl mx-auto">
                             Choisissez une catégorie et défiez-vous avec nos quiz interactifs
                         </p>
+                        <div className="pt-6">
+                            <Button asChild size="lg" className="text-lg">
+                                <Link href="/leaderboard">Voir le classement</Link>
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </section>

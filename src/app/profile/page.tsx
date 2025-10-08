@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { QuizHistoryList } from "@/components/QuizHistoryList";
+import { calculateUserStats } from "@/lib/stats";
 
 export default async function ProfilePage() {
     const session = await getServerSession(authOptions);
@@ -23,17 +24,7 @@ export default async function ProfilePage() {
         }
     });
 
-    const totalQuizzes = attempts.length;
-    const totalScore = attempts.reduce((sum, attempt) => sum + attempt.score, 0);
-    const totalQuestions = attempts.reduce((sum, attempt) => sum + attempt.totalQuestions, 0);
-    const averageScore = totalQuestions > 0
-        ? Math.round((totalScore / totalQuestions) * 100)
-        : 0;
-    const bestAttempt = attempts.reduce((best, attempt) => {
-        const currentPercentage = (attempt.score / attempt.totalQuestions) * 100;
-        const bestPercentage = best ? (best.score / best.totalQuestions) * 100 : 0;
-        return currentPercentage > bestPercentage ? attempt : best;
-    }, null as typeof attempts[0] | null);
+    const stats = calculateUserStats(attempts);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 py-12 px-4">
@@ -46,23 +37,31 @@ export default async function ProfilePage() {
                             </h1>
                             <p className="text-muted-foreground">{session.user.email}</p>
                         </div>
-                        <Button asChild variant="outline">
-                            <Link href="/">Nouveau Quiz</Link>
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button asChild variant="outline">
+                                <Link href="/">Accueil</Link>
+                            </Button>
+                            <Button asChild variant="outline">
+                                <Link href="/leaderboard">🏆 Classement</Link>
+                            </Button>
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                         <div className="text-center p-4 rounded-lg bg-blue-500/10">
-                            <p className="text-3xl font-bold text-blue-500">{totalQuizzes}</p>
+                            <p className="text-3xl font-bold text-blue-500">{stats.totalQuizzes}</p>
                             <p className="text-sm text-muted-foreground">Quiz joués</p>
                         </div>
                         <div className="text-center p-4 rounded-lg bg-green-500/10">
-                            <p className="text-3xl font-bold text-green-500">{averageScore}%</p>
+                            <p className="text-3xl font-bold text-green-500">{stats.averageScore}%</p>
                             <p className="text-sm text-muted-foreground">Score moyen</p>
                         </div>
                         <div className="text-center p-4 rounded-lg bg-purple-500/10">
                             <p className="text-3xl font-bold text-purple-500">
-                                {bestAttempt ? `${bestAttempt.score}/${bestAttempt.totalQuestions}` : "-"}
+                                {stats.bestAttempt
+                                    ? `${stats.bestAttempt.score}/${stats.bestAttempt.totalQuestions}`
+                                    : "-"
+                                }
                             </p>
                             <p className="text-sm text-muted-foreground">Meilleur score</p>
                         </div>

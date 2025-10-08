@@ -1,0 +1,61 @@
+"use server"
+
+import {prisma} from "@/lib/prisma";
+import {calculateUserStats} from "@/lib/stats";
+
+export interface LeaderboardEntry {
+    userId: string;
+    userName: string;
+    userEmail: string;
+    totalQuizzes: number;
+    averageScore: number;
+    bestScore: number;
+    rank: number;
+}
+
+export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
+    try {
+        const users = await prisma.user.findMany({
+            include: {
+                attempts: {
+                    select: {
+                        score: true,
+                        totalQuestions: true
+                    }
+                }
+            }
+        });
+
+        return users
+            .map(user => {
+                const stats = calculateUserStats(user.attempts);
+
+                return {
+                    userId: user.id,
+                    userName: user.name || "Anonyme",
+                    userEmail: user.email || "",
+                    totalQuizzes: stats.totalQuizzes,
+                    averageScore: stats.averageScore,
+                    bestScore: stats.bestScore,
+                    rank: 0
+                };
+            })
+            .filter(entry => entry.totalQuizzes > 0)
+            .sort((a, b) => {
+                if (b.averageScore !== a.averageScore) {
+                    return b.averageScore - a.averageScore;
+                }
+                if (b.bestScore !== a.bestScore) {
+                    return b.bestScore - a.bestScore;
+                }
+                return b.totalQuizzes - a.totalQuizzes;
+            })
+            .map((entry, index) => ({
+                ...entry,
+                rank: index + 1
+            }));
+    } catch (error) {
+        console.error("Erreur récupération leaderboard:", error);
+        throw new Error("Impossible de récupérer le classement");
+    }
+}

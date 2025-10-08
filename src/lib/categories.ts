@@ -40,6 +40,18 @@ export const QUIZ_CATEGORIES = {
         slug: "history",
         icon: "📜",
         color: "bg-indigo-500"
+    },
+    31: {
+        name: "Anime & Manga",
+        slug: "anime-manga",
+        icon: "🍥",
+        color: "bg-pink-500"
+    },
+    32: {
+        name: "Cartoons",
+        slug: "cartoons",
+        icon: "🐭",
+        color: "bg-teal-500"
     }
 } as const;
 
