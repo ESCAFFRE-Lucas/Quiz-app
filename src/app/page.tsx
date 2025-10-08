@@ -5,6 +5,7 @@ import {getServerSession} from "next-auth";
 import {authOptions} from "@/lib/auth";
 import {redirect} from "next/navigation";
 import {LogoutButton} from "@/components/LogoutButton";
+import {Button} from "@/components/ui/button";
 
 export default async function HomePage() {
     const categories = Object.entries(QUIZ_CATEGORIES).map(([id, category]) => ({
@@ -25,6 +26,9 @@ export default async function HomePage() {
 
                 <div className="relative container mx-auto px-4 py-20 md:py-32">
                     <div className="absolute top-4 right-4">
+                        <Button asChild variant="outline" className="mr-4">
+                            <Link href="/profile">Mon Profil</Link>
+                        </Button>
                         <LogoutButton />
                     </div>
                     <div className="max-w-4xl mx-auto text-center space-y-6">
