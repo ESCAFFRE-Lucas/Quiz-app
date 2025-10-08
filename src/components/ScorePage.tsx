@@ -1,20 +1,69 @@
 "use client"
 
-import {Card} from "@/components/ui/card"
-import {Button} from "@/components/ui/button"
-import {cn} from "@/lib/utils"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import type {Question, UserAnswer} from "@/types/quiz"
 import Link from "next/link"
+import { useEffect, useState, useRef } from "react"
+import { saveQuizResults } from "@/actions/quiz"
+import { useSession } from "next-auth/react"
 
 interface ScorePageProps {
     score: number
     totalQuestions: number
     userAnswers: UserAnswer[]
     questions: Question[]
+    categoryId: number
+    categoryName: string
 }
 
-export function ScorePage({score, totalQuestions, userAnswers, questions}: ScorePageProps) {
+export function ScorePage({
+  score,
+  totalQuestions,
+  userAnswers,
+  questions,
+  categoryId,
+  categoryName
+}: ScorePageProps) {
+    const { data: session } = useSession()
+    const [saveError, setSaveError] = useState<string | null>(null)
+    const hasSaved = useRef(false)
+
     const percentage = Math.round((score / totalQuestions) * 100)
+
+    useEffect(() => {
+        async function saveResults() {
+            if (hasSaved.current) return;
+            if (!session?.user?.id) return;
+
+            hasSaved.current = true;
+
+            try {
+                await saveQuizResults(
+                    session.user.id,
+                    categoryId,
+                    categoryName,
+                    score,
+                    totalQuestions,
+                    userAnswers.map((ua) => ({
+                        questionText: ua.question,
+                        userAnswer: ua.answer,
+                        correctAnswer: ua.correctAnswer,
+                        isCorrect: ua.correct
+                    }))
+                );
+
+                console.log("✅ Résultats sauvegardés !");
+            } catch (error) {
+                console.error("❌ Erreur sauvegarde:", error);
+                setSaveError("Impossible de sauvegarder les résultats");
+                hasSaved.current = false;
+            }
+        }
+
+        saveResults();
+    }, [session, categoryId, categoryName, score, totalQuestions, userAnswers]);
 
     const getScoreMessage = () => {
         if (percentage === 100) return "Parfait ! 🎉"

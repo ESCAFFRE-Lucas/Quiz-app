@@ -76,7 +76,7 @@ export default function LoginPage() {
                                 </div>
                             </div>
 
-                            <div className="space-y-2 animate-in slide-in-from-left duration-500 delay-300">
+                            <div className="space-y-2 animate-in slide-in-from-left duration-500 delay-300 mb-5">
                                 <Label htmlFor="password" className="text-sm font-medium">
                                     Mot de passe
                                 </Label>

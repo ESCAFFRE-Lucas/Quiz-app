@@ -8,15 +8,19 @@ import { ScorePage } from "@/components/ScorePage"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import Link from "next/link";
+import { QUIZ_CATEGORIES } from "@/lib/categories";
+import { fetchQuizQuestions } from "@/actions/quiz";
+
 
 export default function QuizPage({ params }: { params: Promise<{ category: string }> }) {
     const { category } = use(params)
+
+    const categoryInfo = QUIZ_CATEGORIES[category as unknown as keyof typeof QUIZ_CATEGORIES];
 
     const [questions, setQuestions] = useState<Question[]>([])
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
     const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([])
-    const [correctAnswers, setCorrectAnswers] = useState<string[]>([])
     const [showScore, setShowScore] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -24,24 +28,19 @@ export default function QuizPage({ params }: { params: Promise<{ category: strin
     useEffect(() => {
         async function fetchQuestions() {
             try {
-                const response = await fetch(`/api/quiz?category=${category}&amount=10&difficulty=easy`)
-                const data = await response.json()
+                const result = await fetchQuizQuestions(category, "easy", 10);
 
-                if (response.ok) {
-                    setQuestions(data.questions)
-                    setCorrectAnswers(data.questions.map((q: any) => q.correctAnswer))
-                    console.log(data.questions.map((q: any) => q.correctAnswer))
-                } else {
-                    console.warn("Quiz fetch failed (ignored):", data.error);
-                    return;
+                if (result.success) {
+                    setQuestions(result.questions);
                 }
             } catch (err) {
-                setError(err instanceof Error ? err.message : "Une erreur est survenue")
+                return
+            } finally {
+                setIsLoading(false);
             }
-            setIsLoading(false)
         }
 
-        fetchQuestions().then(r => r);
+        fetchQuestions();
     }, [category])
 
     const handleAnswerClick = (answer: string) => {
@@ -52,16 +51,17 @@ export default function QuizPage({ params }: { params: Promise<{ category: strin
         if (!selectedAnswer) return
 
         const currentQuestion = questions[currentQuestionIndex]
-        const isCorrect = selectedAnswer === correctAnswers[currentQuestionIndex]
+        const isCorrect = selectedAnswer === currentQuestion.correctAnswer
 
-        setUserAnswers([
-            ...userAnswers,
-            {
-                question: currentQuestion.question,
-                answer: selectedAnswer,
-                correct: isCorrect,
-            },
-        ])
+        const newAnswer: UserAnswer = {
+            question: currentQuestion.question,
+            answer: selectedAnswer,
+            correct: isCorrect,
+            correctAnswer: currentQuestion.correctAnswer
+        };
+
+        const updatedAnswers = [...userAnswers, newAnswer];
+        setUserAnswers(updatedAnswers);
 
         setSelectedAnswer(null)
 
@@ -118,7 +118,16 @@ export default function QuizPage({ params }: { params: Promise<{ category: strin
 
     if (showScore) {
         const score = calculateScore()
-        return <ScorePage score={score} totalQuestions={questions.length} userAnswers={userAnswers} questions={questions}/>
+        return (
+            <ScorePage
+                score={score}
+                totalQuestions={questions.length}
+                userAnswers={userAnswers}
+                questions={questions}
+                categoryId={parseInt(category)}
+                categoryName={categoryInfo?.name || "Quiz"}
+            />
+        )
     }
 
     const currentQuestion = questions[currentQuestionIndex]

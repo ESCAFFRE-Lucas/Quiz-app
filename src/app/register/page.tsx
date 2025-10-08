@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { registerUser } from "@/actions/auth"
+import { signIn } from "next-auth/react"
 
 export default function RegisterPage() {
     const router = useRouter()
@@ -23,20 +25,21 @@ export default function RegisterPage() {
         setError("")
 
         try {
-            const response = await fetch("/api/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, password, name }),
-            })
+            const result = await registerUser(email, password, name)
 
-            const data = await response.json()
+            if (result.success) {
+                const signInResult = await signIn("credentials", {
+                    email,
+                    password,
+                    redirect: false,
+                })
 
-            if (!response.ok) {
-                setError(data.error || "Une erreur est survenue")
-            } else {
-                router.push("/login")
+                if (signInResult?.error) {
+                    setError("Compte créé ! Veuillez vous connecter.")
+                    setTimeout(() => router.push("/login"), 2000)
+                } else {
+                    router.push("/")
+                }
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : "Une erreur est survenue")
@@ -97,7 +100,7 @@ export default function RegisterPage() {
                                 </div>
                             </div>
 
-                            <div className="space-y-2 animate-in slide-in-from-left duration-500 delay-400">
+                            <div className="space-y-2 animate-in slide-in-from-left duration-500 delay-400 mb-5">
                                 <Label htmlFor="password" className="text-sm font-medium">
                                     Mot de passe
                                 </Label>

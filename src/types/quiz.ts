@@ -4,13 +4,14 @@ export interface Question {
     difficulty: string;
     question: string;
     answers: string[];
-    correct_answer: string;
+    correctAnswer: string;
 }
 
 export interface UserAnswer {
     question: string;
     answer: string;
     correct: boolean;
+    correctAnswer: string;
 }
 
 export interface QuizResponse {
