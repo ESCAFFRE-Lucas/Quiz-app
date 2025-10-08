@@ -8,7 +8,9 @@ export async function middleware(req: NextRequest) {
         secret: process.env.NEXTAUTH_SECRET,
     });
 
-    const isAuthPage = req.nextUrl.pathname.startsWith("/login");
+    const isAuthPage =
+        req.nextUrl.pathname.startsWith("/login") ||
+        req.nextUrl.pathname.startsWith("/register");
 
     if (isAuthPage) {
         if (token) {
@@ -26,5 +28,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/((?!api|_next|static|login|.*\\..*).*)"],
-};   
+    matcher: ["/((?!api|_next|static|.*\\..*).*)"],
+};
