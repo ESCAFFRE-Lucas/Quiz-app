@@ -126,14 +126,12 @@ export default function QuizPage({ params }: { params: Promise<{ category: strin
     return (
         <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 py-12 px-4">
             <div className="max-w-3xl mx-auto space-y-8">
-                {/* Question card */}
                 <QuestionCard
                     question={currentQuestion.question}
                     currentIndex={currentQuestionIndex}
                     totalQuestions={questions.length}
                 />
 
-                {/* Answer buttons */}
                 <div className="space-y-4">
                     {currentQuestion.answers.map((answer, index) => (
                         <AnswerButton
@@ -146,7 +144,6 @@ export default function QuizPage({ params }: { params: Promise<{ category: strin
                     ))}
                 </div>
 
-                {/* Next button */}
                 <div className="flex justify-end pt-4">
                     <Button
                         onClick={handleNext}

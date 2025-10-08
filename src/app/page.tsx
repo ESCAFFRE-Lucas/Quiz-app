@@ -4,6 +4,7 @@ import Link from "next/link";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/lib/auth";
 import {redirect} from "next/navigation";
+import {LogoutButton} from "@/components/LogoutButton";
 
 export default async function HomePage() {
     const categories = Object.entries(QUIZ_CATEGORIES).map(([id, category]) => ({
@@ -19,12 +20,13 @@ export default async function HomePage() {
 
     return (
         <div className="min-h-screen bg-background">
-            {/* Hero Section */}
             <section className="relative overflow-hidden border-b border-border/50">
-                {/* Subtle background pattern */}
                 <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-background to-accent/10"/>
 
                 <div className="relative container mx-auto px-4 py-20 md:py-32">
+                    <div className="absolute top-4 right-4">
+                        <LogoutButton />
+                    </div>
                     <div className="max-w-4xl mx-auto text-center space-y-6">
                         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-balance text-foreground">
                             Bonjour {session.user.name || session.user.email}!
@@ -36,7 +38,6 @@ export default async function HomePage() {
                 </div>
             </section>
 
-            {/* Categories Grid */}
             <section className="container mx-auto px-4 py-16 md:py-24">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {categories.map((category) => (
