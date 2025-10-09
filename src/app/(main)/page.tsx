@@ -47,7 +47,6 @@ export default function HomePage() {
             </section>
 
             <section className="container mx-auto px-4 py-16 md:py-24">
-                {/* Barre de recherche */}
                 <div className="mb-12">
                     <SearchBar
                         value={searchQuery}
@@ -56,15 +55,12 @@ export default function HomePage() {
                     />
                 </div>
 
-                {/* Résultats */}
                 {filteredCategories.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         {filteredCategories.map((category) => (
                             <Link href={`/quiz/${category.id}`} key={category.id}>
                                 <CategoryCard
-                                    id={category.id}
                                     name={category.name}
-                                    slug={category.slug}
                                     icon={category.icon}
                                     color={category.color}
                                 />
@@ -74,7 +70,7 @@ export default function HomePage() {
                 ) : (
                     <div className="text-center py-12">
                         <p className="text-xl text-muted-foreground mb-4">
-                            Aucune catégorie trouvée pour "{searchQuery}"
+                            Aucune catégorie trouvée pour &#34;{searchQuery}&#34;
                         </p>
                         <Button onClick={() => setSearchQuery("")} variant="outline">
                             Effacer la recherche
