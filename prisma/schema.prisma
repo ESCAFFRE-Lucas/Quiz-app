@@ -8,11 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String // Hash du password
-  createdAt DateTime @default(now())
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  password     String
+  image        String?
+  bio          String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+  totalQuizzes Int      @default(0)
+  totalPoints  Int      @default(0)
 
   attempts QuizAttempt[]
   accounts Account[]

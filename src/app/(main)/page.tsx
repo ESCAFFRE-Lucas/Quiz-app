@@ -4,7 +4,6 @@ import Link from "next/link";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/lib/auth";
 import {redirect} from "next/navigation";
-import {LogoutButton} from "@/components/LogoutButton";
 import {Button} from "@/components/ui/button";
 
 export default async function HomePage() {
@@ -54,7 +53,6 @@ export default async function HomePage() {
                                 color={category.color}
                             />
                         </Link>
-
                     ))}
                 </div>
             </section>

@@ -2,7 +2,8 @@
 
 import { prisma } from "@/lib/prisma";
 import he from "he";
-import {revalidatePath} from "next/cache";
+import { revalidatePath } from "next/cache";
+import { updateUserStatsAfterQuiz, calculateQuizPoints } from "@/lib/stats";
 
 let sessionToken: string | null = null;
 
@@ -116,11 +117,25 @@ export async function saveQuizResults(
             }
         });
 
+        await updateUserStatsAfterQuiz(userId, score, totalQuestions);
+
+        const updatedUser = await prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                totalQuizzes: true,
+                totalPoints: true,
+            },
+        });
+
+        const pointsEarned = calculateQuizPoints(score, totalQuestions);
+
         revalidatePath("/profile");
 
         return {
             success: true,
-            attemptId: attempt.id
+            attemptId: attempt.id,
+            pointsEarned,
+            userStats: updatedUser,
         };
     } catch (error) {
         console.error("Erreur sauvegarde quiz:", error);
