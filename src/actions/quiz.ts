@@ -43,7 +43,7 @@ export async function fetchQuizQuestions(
         const apiResponse = await fetch(apiUrl);
 
         if (!apiResponse.ok) {
-            new Error("Erreur lors de la récupération des questions");
+            throw new Error("Erreur lors de la récupération des questions");
         }
 
         const data = await apiResponse.json();
@@ -52,7 +52,7 @@ export async function fetchQuizQuestions(
             if (data.response_code === 4) {
                 sessionToken = null;
             }
-            new Error("Pas de questions disponibles pour cette catégorie");
+            throw new Error("Pas de questions disponibles pour cette catégorie");
         }
 
         const formattedQuestions = data.results.map((q: any) => {

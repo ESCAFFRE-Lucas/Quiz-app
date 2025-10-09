@@ -3,38 +3,61 @@
 import { put } from "@vercel/blob";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { writeFile } from "fs/promises";
+import path from "path";
 
 export async function uploadProfileImage(formData: FormData) {
     try {
         const session = await getServerSession(authOptions);
 
         if (!session) {
-            new Error("Non authentifié");
+            throw new Error("Non authentifié");
         }
 
         const file = formData.get("file") as File;
 
         if (!file) {
-            new Error("Aucun fichier fourni");
+            throw new Error("Aucun fichier fourni");
         }
 
         if (!file.type.startsWith("image/")) {
-            new Error("Le fichier doit être une image");
+            throw new Error("Le fichier doit être une image");
         }
 
         const maxSize = 5 * 1024 * 1024;
         if (file.size > maxSize) {
-            new Error("L'image ne doit pas dépasser 5MB");
+            throw new Error("L'image ne doit pas dépasser 5MB");
         }
 
-        const blob = await put(`avatars/${session?.user.id}-${Date.now()}.${file.name.split('.').pop()}`, file, {
-            access: "public",
-        });
+        const hasVercelBlob = !!process.env.BLOB_READ_WRITE_TOKEN;
 
-        return {
-            success: true,
-            url: blob.url,
-        };
+        if (hasVercelBlob) {
+            const blob = await put(
+                `avatars/${session.user.id}-${Date.now()}.${file.name.split('.').pop()}`,
+                file,
+                {
+                    access: "public",
+                }
+            );
+
+            return {
+                success: true,
+                url: blob.url,
+            };
+        } else {
+            const bytes = await file.arrayBuffer();
+            const buffer = Buffer.from(bytes);
+
+            const fileName = `${session.user.id}-${Date.now()}.${file.name.split('.').pop()}`;
+            const uploadPath = path.join(process.cwd(), "public", "uploads", fileName);
+
+            await writeFile(uploadPath, buffer);
+
+            return {
+                success: true,
+                url: `/uploads/${fileName}`,
+            };
+        }
     } catch (error) {
         console.error("Error uploading image:", error);
         throw new Error(
