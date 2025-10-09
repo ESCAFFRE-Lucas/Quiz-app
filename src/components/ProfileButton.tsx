@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { User, LogOut, Trophy } from "lucide-react";
 import { updateUserProfile } from "@/actions/profile";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 interface ProfileButtonProps {
     user: {
@@ -111,7 +112,13 @@ export function ProfileButton({ user, stats, onSignOut }: ProfileButtonProps) {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                         className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950/20"
-                        onClick={onSignOut}
+                        onClick={() => {
+                            if (onSignOut) {
+                                onSignOut();
+                            } else {
+                                signOut({ callbackUrl: "/login" });
+                            }
+                        }}
                     >
                         <LogOut className="mr-2 h-4 w-4" />
                         Se déconnecter

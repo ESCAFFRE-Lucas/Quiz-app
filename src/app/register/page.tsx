@@ -50,7 +50,7 @@ export default function RegisterPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-accent/20 via-background to-accent/10 p-4">
-            <div className="w-full max-w-md opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]">
+            <div className="w-full max-w-md animate-fadeIn">
                 <Card className="border-border/50 shadow-lg backdrop-blur-sm bg-card/95">
                     <CardHeader className="space-y-2 text-center">
                         <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/30 flex items-center justify-center mb-2">
@@ -162,6 +162,10 @@ export default function RegisterPage() {
                         opacity: 1;
                         transform: translateY(0);
                     }
+                }
+
+                .animate-fadeIn {
+                    animation: fadeIn 0.5s ease-out forwards;
                 }
             `}</style>
         </div>

@@ -45,16 +45,14 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-accent/20 via-background to-accent/10 p-4">
-            <div className="w-full max-w-md opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-accent/20 via-background to-accent/10 p-4">
+            <div className="w-full max-w-md animate-fadeIn">
                 <Card className="border-border/50 shadow-lg backdrop-blur-sm bg-card/95">
                     <CardHeader className="space-y-2 text-center">
                         <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/30 flex items-center justify-center mb-2">
                             <span className="text-3xl">🎯</span>
                         </div>
-                        <CardTitle className="text-3xl font-bold">
-                            Connexion
-                        </CardTitle>
+                        <CardTitle className="text-3xl font-bold">Connexion</CardTitle>
                         <CardDescription className="text-base">
                             Connectez-vous pour continuer votre aventure
                         </CardDescription>
@@ -63,37 +61,33 @@ export default function LoginPage() {
                     <form onSubmit={handleSubmit}>
                         <CardContent className="space-y-5">
                             <div className="space-y-2">
-                                <Label htmlFor="email" className="text-sm font-medium">
-                                    Email
-                                </Label>
+                                <Label htmlFor="email">Email</Label>
                                 <Input
                                     type="email"
                                     id="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
-                                    className="h-11 transition-colors duration-200"
                                     placeholder="jean@exemple.com"
+                                    className="h-11"
                                 />
                             </div>
 
                             <div className="space-y-2 mb-5">
-                                <Label htmlFor="password" className="text-sm font-medium">
-                                    Mot de passe
-                                </Label>
+                                <Label htmlFor="password">Mot de passe</Label>
                                 <Input
                                     type="password"
                                     id="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
-                                    className="h-11 transition-colors duration-200"
                                     placeholder="••••••••"
+                                    className="h-11"
                                 />
                             </div>
 
                             {error && (
-                                <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 animate-[fadeIn_0.3s_ease-out]">
+                                <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 animate-fadeIn">
                                     <p className="text-sm text-destructive font-medium">{error}</p>
                                 </div>
                             )}
@@ -103,7 +97,7 @@ export default function LoginPage() {
                             <Button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full h-11 text-base font-semibold transition-all duration-200 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full h-11 text-base font-semibold transition-all duration-200 hover:shadow-lg disabled:opacity-50"
                             >
                                 {isLoading ? (
                                     <span className="flex items-center gap-2">
@@ -116,10 +110,10 @@ export default function LoginPage() {
                             </Button>
 
                             <div className="text-center text-sm text-muted-foreground">
-                                Pas encore de compte?{" "}
+                                Pas encore de compte ?{" "}
                                 <Link
                                     href="/register"
-                                    className="font-semibold text-foreground hover:text-primary transition-colors duration-200 hover:underline underline-offset-4"
+                                    className="font-semibold text-foreground hover:text-primary transition-colors hover:underline underline-offset-4"
                                 >
                                     Inscrivez-vous
                                 </Link>
@@ -129,22 +123,27 @@ export default function LoginPage() {
                 </Card>
 
                 <p className="text-center text-xs text-muted-foreground mt-6">
-                    Besoin d&#39;aide? Contactez notre support
+                    Besoin d&#39;aide ? Contactez notre support
                 </p>
             </div>
 
             <style jsx global>{`
                 @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                        transform: translateY(10px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
+                  from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                  }
+                  to {
+                    opacity: 1;
+                    transform: translateY(0);
+                  }
                 }
-            `}</style>
+        
+                .animate-fadeIn {
+                  animation: fadeIn 0.5s ease-out forwards;
+                }
+              `}
+            </style>
         </div>
-    )
+    );
 }
