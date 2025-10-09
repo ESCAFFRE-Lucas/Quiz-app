@@ -1,5 +1,4 @@
 import TenorGif from "@/components/TenorGif";
-import Link from "next/link";
 
 export default async function AboutPage() {
     return (
