@@ -6,8 +6,8 @@ import { QUIZ_CATEGORIES } from "@/lib/categories";
 import { Card } from "@/components/ui/card";
 import { QuizHistoryList } from "@/components/QuizHistoryList";
 import { getCompleteUserStats } from "@/lib/stats";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {EditProfileButton} from "@/components/EditProfileButton";
+import Image from "next/image";
 
 export default async function ProfilePage() {
     const session = await getServerSession(authOptions);
@@ -58,12 +58,25 @@ export default async function ProfilePage() {
             <div className="max-w-4xl mx-auto space-y-8">
                 <Card className="p-8 border-2 border-border/50 bg-gradient-to-br from-card to-card/50">
                     <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                        <Avatar className="h-32 w-32 border-4 border-primary/20 shadow-xl">
-                            <AvatarImage src={user.image || undefined} alt={user.name || "User"} />
-                            <AvatarFallback className="text-4xl font-bold bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                                {getUserInitials()}
-                            </AvatarFallback>
-                        </Avatar>
+                        <div className="h-32 w-32 rounded-full border-4 border-primary/20 shadow-xl overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600">
+                            {user.image ? (
+                                <Image
+                                    src={user.image}
+                                    alt={user.name || "User"}
+                                    width={128}
+                                    height={128}
+                                    className="object-cover"
+                                    priority
+                                    fetchPriority="high"
+                                    sizes="128px"
+                                    quality={85}
+                                />
+                            ) : (
+                                <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-white">
+                                    {getUserInitials()}
+                                </div>
+                            )}
+                        </div>
 
                         <div className="flex-1 text-center md:text-left">
                             <div className="flex flex-col md:flex-row items-center md:items-start gap-3 mb-2">

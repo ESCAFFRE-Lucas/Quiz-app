@@ -22,6 +22,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
             image: true,
             bio: true,
             totalPoints: true,
+            totalQuizzes: true,
         }
     });
 
@@ -34,7 +35,8 @@ export default async function MainLayout({ children }: { children: React.ReactNo
         select: {
             score: true,
             totalQuestions: true,
-        }
+        },
+        take: 100,
     });
 
     const stats = getCompleteUserStats(attempts, user.totalPoints);

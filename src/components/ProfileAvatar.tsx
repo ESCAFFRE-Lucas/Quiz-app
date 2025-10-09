@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
 import { Upload } from "lucide-react";
 
 interface ProfileAvatarProps {
@@ -26,12 +26,24 @@ export function ProfileAvatar({ image, name, email, isEditing, isUploading, onIm
     return (
         <div className="flex flex-col items-center space-y-4">
             <div className="relative">
-                <Avatar className="h-32 w-32 border-4 border-primary/20">
-                    <AvatarImage src={image} alt={name || "User"} />
-                    <AvatarFallback className="text-3xl bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                        {getUserInitials()}
-                    </AvatarFallback>
-                </Avatar>
+                <div className="h-32 w-32 rounded-full border-4 border-primary/20 overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600">
+                    {image ? (
+                        <Image
+                            src={image}
+                            alt={name || "User avatar"}
+                            width={128}
+                            height={128}
+                            className="object-cover"
+                            priority
+                            sizes="128px"
+                            quality={85}
+                        />
+                    ) : (
+                        <div className="flex h-full w-full items-center justify-center text-3xl font-bold text-white">
+                            {getUserInitials()}
+                        </div>
+                    )}
+                </div>
 
                 {isEditing && (
                     <label htmlFor="image-upload" className="absolute bottom-0 right-0">
