@@ -42,6 +42,10 @@ next-env.d.ts
 
 /src/generated/prisma
 
+# Prisma
 prisma/schema.prisma
 *.db
 *.db-journal
+
+# Prisma client
+node_modules/.prisma
