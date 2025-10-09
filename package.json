@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "prebuild": "tsx scripts/select-schema.ts",
-    "build": "next build --turbopack",
+    "build": "tsx scripts/select-schema.ts && prisma generate && next build --turbopack",
     "start": "next start",
     "lint": "eslint"
   },
