@@ -26,8 +26,10 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
             }
         });
 
+        type UserWithAttempts = typeof users[number];
+
         return users
-            .map(user => {
+            .map((user: UserWithAttempts) => {
                 const stats = calculateUserStats(user.attempts);
 
                 return {
