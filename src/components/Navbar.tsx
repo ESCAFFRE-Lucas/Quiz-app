@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
-import { Trophy, Home, Menu } from "lucide-react"
+import {Trophy, Home, Menu, BookMarked, BadgeQuestionMark} from "lucide-react"
 import { ProfileButton } from "./ProfileButton"
 
 interface NavbarProps {
@@ -31,6 +31,7 @@ export function Navbar({ user, stats, onSignOut }: NavbarProps) {
     const navLinks = [
         { href: "/", label: "Accueil", icon: Home },
         { href: "/leaderboard", label: "Classement", icon: Trophy },
+        { href: "/about", label: "À propos", icon: BadgeQuestionMark },
     ]
 
     const isActive = (href: string) => {

@@ -10,11 +10,11 @@ export async function registerUser(
 ) {
     try {
         if (!email || !password) {
-            throw new Error("Email et mot de passe requis");
+            new Error("Email et mot de passe requis");
         }
 
         if (password.length < 6) {
-            throw new Error("Le mot de passe doit contenir au moins 6 caractères");
+            new Error("Le mot de passe doit contenir au moins 6 caractères");
         }
 
         const existingUser = await prisma.user.findUnique({
@@ -22,7 +22,7 @@ export async function registerUser(
         });
 
         if (existingUser) {
-            throw new Error("Cet email est déjà utilisé");
+            new Error("Cet email est déjà utilisé");
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);

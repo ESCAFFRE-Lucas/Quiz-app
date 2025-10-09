@@ -61,7 +61,6 @@ export function Leaderboard({ entries, currentUserId }: LeaderboardProps) {
                         )}
                     >
                         <div className="flex items-center gap-4">
-                            {/* Rang */}
                             <div className={cn(
                                 "flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg",
                                 entry.rank <= 3 ? "bg-gradient-to-br from-primary/20 to-primary/5" : "bg-muted"
@@ -71,7 +70,6 @@ export function Leaderboard({ entries, currentUserId }: LeaderboardProps) {
                                 </span>
                             </div>
 
-                            {/* Infos utilisateur */}
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
                                     <h3 className="font-semibold text-foreground truncate">
@@ -88,7 +86,6 @@ export function Leaderboard({ entries, currentUserId }: LeaderboardProps) {
                                 </p>
                             </div>
 
-                            {/* Statistiques */}
                             <div className="flex items-center gap-6">
                                 <div className="text-center">
                                     <p className={cn("text-2xl font-bold", getScoreColor(entry.averageScore))}>

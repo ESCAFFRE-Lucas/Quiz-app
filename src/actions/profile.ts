@@ -14,23 +14,23 @@ export async function updateUserProfile(data: {
         const session = await getServerSession(authOptions);
 
         if (!session) {
-            throw new Error("Non authentifié");
+            new Error("Non authentifié");
         }
 
         if (!data.name || data.name.trim().length === 0) {
-            throw new Error("Le nom est requis");
+            new Error("Le nom est requis");
         }
 
         if (data.name.length > 50) {
-            throw new Error("Le nom ne peut pas dépasser 50 caractères");
+            new Error("Le nom ne peut pas dépasser 50 caractères");
         }
 
         if (data.bio && data.bio.length > 500) {
-            throw new Error("La biographie ne peut pas dépasser 500 caractères");
+            new Error("La biographie ne peut pas dépasser 500 caractères");
         }
 
         const updatedUser = await prisma.user.update({
-            where: { id: session.user.id },
+            where: { id: session?.user.id },
             data: {
                 name: data.name.trim(),
                 bio: data.bio?.trim() || null,

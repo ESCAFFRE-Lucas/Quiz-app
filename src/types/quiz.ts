@@ -14,11 +14,6 @@ export interface UserAnswer {
     correctAnswer: string;
 }
 
-export interface QuizResponse {
-    response_code: number;
-    results: Question[];
-}
-
 export interface Answer {
     id: string;
     attemptId: string;

@@ -140,8 +140,8 @@ export function ProfileModal({ isOpen, onClose, user, stats, onUpdate }: Profile
                                     <div className="flex justify-between text-sm mb-1">
                                         <span className="text-muted-foreground">Niveau actuel</span>
                                         <span className="font-semibold">
-                      Niveau {Math.floor(stats.totalPoints / 100) + 1}
-                    </span>
+                                          Niveau {Math.floor(stats.totalPoints / 100) + 1}
+                                        </span>
                                     </div>
                                     <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
                                         <div
