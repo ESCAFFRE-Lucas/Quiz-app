@@ -7,6 +7,7 @@ export interface LeaderboardEntry {
     userId: string;
     userName: string;
     userEmail: string;
+    userImage?: string | null
     totalQuizzes: number;
     averageScore: number;
     bestScore: number;
@@ -35,6 +36,7 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
                 return {
                     userId: user.id,
                     userName: user.name || "Anonyme",
+                    userImage: user.image,
                     userEmail: user.email || "",
                     totalQuizzes: stats.totalQuizzes,
                     averageScore: stats.averageScore,

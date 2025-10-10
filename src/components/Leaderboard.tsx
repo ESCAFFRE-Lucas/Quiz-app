@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import type { LeaderboardEntry } from "@/actions/leaderboard";
 
 interface LeaderboardProps {
@@ -61,17 +62,27 @@ export function Leaderboard({ entries, currentUserId }: LeaderboardProps) {
                         )}
                     >
                         <div className="flex items-center gap-4">
-                            <div className={cn(
-                                "flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg",
-                                entry.rank <= 3 ? "bg-gradient-to-br from-primary/20 to-primary/5" : "bg-muted"
-                            )}>
-                                <span className={getRankColor(entry.rank)}>
-                                    {getRankIcon(entry.rank)}
-                                </span>
+                            <div className="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                                {entry.userImage ? (
+                                    <Image
+                                        src={entry.userImage}
+                                        alt={entry.userName}
+                                        width={48}
+                                        height={48}
+                                        className="rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <span className="text-xl font-semibold text-muted-foreground">
+                                        {entry.userName.charAt(0).toUpperCase()}
+                                    </span>
+                                )}
                             </div>
 
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
+                                    <span className={cn("text-lg font-bold", getRankColor(entry.rank))}>
+                                        {getRankIcon(entry.rank)}
+                                    </span>
                                     <h3 className="font-semibold text-foreground truncate">
                                         {entry.userName}
                                         {isCurrentUser && (

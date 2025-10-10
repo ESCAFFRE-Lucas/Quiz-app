@@ -1,5 +1,7 @@
 import {NextAuthOptions} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GithubProvider from "next-auth/providers/github";
+import DiscordProvider from "next-auth/providers/discord";
 import {PrismaAdapter} from "@auth/prisma-adapter";
 import {prisma} from "./prisma";
 import bcrypt from "bcryptjs";
@@ -8,6 +10,14 @@ import bcrypt from "bcryptjs";
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
+        GithubProvider({
+            clientId: process.env.GITHUB_ID!,
+            clientSecret: process.env.GITHUB_SECRET!,
+        }),
+        DiscordProvider({
+            clientId: process.env.DISCORD_CLIENT_ID!,
+            clientSecret: process.env.DISCORD_CLIENT_SECRET!,
+        }),
         CredentialsProvider({
             name: "credentials",
             credentials: {
@@ -23,8 +33,12 @@ export const authOptions: NextAuthOptions = {
                     where: { email: credentials.email }
                 });
 
-                if (!user || !user.password) {
+                if (!user) {
                     throw new Error("Email ou mot de passe incorrect");
+                }
+
+                if (!user.password) {
+                    throw new Error("Utilisez Discord ou GitHub pour vous connecter");
                 }
 
                 const isValid = await bcrypt.compare(credentials.password, user.password);
@@ -42,22 +56,17 @@ export const authOptions: NextAuthOptions = {
         })
     ],
     session: {
-        strategy: "jwt"
+        strategy: "database",
+        maxAge: 30 * 24 * 60 * 60,
     },
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: "/login",
     },
     callbacks: {
-        async jwt({ token, user }) {
-            if (user) {
-                token.id = user.id;
-            }
-            return token;
-        },
-        async session({ session, token }) {
+        async session({ session, user }) {
             if (session.user) {
-                session.user.id = token.id as string;
+                session.user.id = user.id;
             }
             return session;
         }

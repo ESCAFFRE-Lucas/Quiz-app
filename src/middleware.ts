@@ -1,26 +1,23 @@
-import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
-    const token = await getToken({
-        req,
-        secret: process.env.NEXTAUTH_SECRET,
-    });
+    const sessionToken = req.cookies.get("next-auth.session-token") ||
+        req.cookies.get("__Secure-next-auth.session-token");
 
     const isAuthPage =
         req.nextUrl.pathname.startsWith("/login") ||
         req.nextUrl.pathname.startsWith("/register");
 
     if (isAuthPage) {
-        if (token) {
+        if (sessionToken) {
             return NextResponse.redirect(new URL("/", req.url));
         }
         return NextResponse.next();
     }
 
-    if (!token) {
-        console.log("No token found, redirecting to /login");
+    if (!sessionToken) {
+        console.log("No session token found, redirecting to /login");
         return NextResponse.redirect(new URL("/login", req.url));
     }
 
