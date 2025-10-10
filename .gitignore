@@ -49,3 +49,5 @@ prisma/schema.prisma
 
 # Prisma client
 node_modules/.prisma
+
+scripts/migration-db-prod.sh
