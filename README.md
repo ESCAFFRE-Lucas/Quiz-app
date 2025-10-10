@@ -9,34 +9,49 @@
    npm install
 
 2. Crée un fichier .env à la racine :
+
+    ``` cp .env.example .env ```
+
 # Base de données (SQLite pour le développement local)
-DATABASE_URL="file:./prisma/dev.db"
+
+    ```DATABASE_URL="file:./prisma/dev.db"```
 
 # NextAuth Configuration
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-here"
+
+    ```NEXTAUTH_URL="http://localhost:3000"```
+
+    ```NEXTAUTH_SECRET="your-secret-here"```
 
 # OAuth Providers (Optionnel - laisser vide si vous n'utilisez que email/password)
-GITHUB_ID=""
-GITHUB_SECRET=""
-DISCORD_CLIENT_ID=""
-DISCORD_CLIENT_SECRET=""
+
+    ```GITHUB_ID=""```
+
+    ```GITHUB_SECRET=""```
+
+    ```DISCORD_CLIENT_ID=""```
+
+    ```DISCORD_CLIENT_SECRET=""```
 
 # Vercel Blob (Optionnel - nécessaire seulement pour l'upload d'images de profil)
-BLOB_READ_WRITE_TOKEN=""
+
+    ```BLOB_READ_WRITE_TOKEN=""```
 
 3. Générer un secret pour NEXTAUTH_SECRET :
-   openssl rand -base64 32
 
-Note: L'authentification OAuth (GitHub/Discord) est optionnelle. Vous pouvez utiliser
+   ```openssl rand -base64 32```
+
+   Note: L'authentification OAuth (GitHub/Discord) est optionnelle. Vous pouvez utiliser
    l'inscription par email/mot de passe sans configurer ces variables.
 
 4. Initialise la base de données :
-   npx prisma generate
-   npx prisma db push
+
+   ```npx prisma generate```
+
+   ```npx prisma db push```
 
 5. Lance le serveur :
-   npm run dev
+
+   ```npm run dev```
 
 L'application sera accessible sur http://localhost:3000
 
