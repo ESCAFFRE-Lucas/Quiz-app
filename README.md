@@ -93,4 +93,4 @@ Le projet peut être déployé sur Vercel. Assurez-vous de configurer les variab
   - Fait : Utilisation de CSS modules ou Tailwind CSS pour un design responsive.
 
 - [x] **SEO optimisé (metadata dynamiques)**
-  - Fait : SEO avec lighthouse score de 100/100. Utilisation de metadata dynamiques dans les pages.
+  - Fait : SEO avec lighthouse score de 100/100.
