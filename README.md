@@ -1,83 +1,147 @@
 # Quiz App
 
-## Installation
+Application de quiz interactive avec authentification, système de points et classement.
 
-1. Clone le projet
-   ```bash
-   git clone https://github.com/ESCAFFRE-Lucas/Quiz-app.git
-   cd Quiz-app
-   npm install
+## 🚀 Installation
 
-2. Crée un fichier .env à la racine :
+### 1. Cloner le projet
+```bash
+git clone https://github.com/ESCAFFRE-Lucas/Quiz-app.git
+cd Quiz-app
+npm install
+```
 
-    ``` cp .env.example .env ```
+### 2. Configurer les variables d'environnement
 
+Créez un fichier `.env` à la racine du projet :
+
+```bash
+cp .env.example .env
+```
+
+Puis modifiez le fichier `.env` avec les valeurs suivantes :
+
+```env
 # Base de données (SQLite pour le développement local)
-
-    ```DATABASE_URL="file:./prisma/dev.db"```
+DATABASE_URL="file:./prisma/dev.db"
 
 # NextAuth Configuration
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-here"
 
-    ```NEXTAUTH_URL="http://localhost:3000"```
+# OAuth Providers (Optionnel - laissez vide si vous utilisez uniquement email/password)
+GITHUB_ID=""
+GITHUB_SECRET=""
+DISCORD_CLIENT_ID=""
+DISCORD_CLIENT_SECRET=""
 
-    ```NEXTAUTH_SECRET="your-secret-here"```
+# Vercel Blob (Optionnel - nécessaire uniquement pour l'upload d'images de profil)
+BLOB_READ_WRITE_TOKEN=""
+```
 
-# OAuth Providers (Optionnel - laisser vide si vous n'utilisez que email/password)
+**Générer un secret pour `NEXTAUTH_SECRET` :**
+```bash
+openssl rand -base64 32
+```
 
-    ```GITHUB_ID=""```
+> **Note :** L'authentification OAuth (GitHub/Discord) et l'upload d'images sont optionnels. Vous pouvez utiliser l'application avec uniquement l'inscription par email/mot de passe.
 
-    ```GITHUB_SECRET=""```
+### 3. Initialiser la base de données
 
-    ```DISCORD_CLIENT_ID=""```
+```bash
+npx prisma generate
+npx prisma db push
+```
 
-    ```DISCORD_CLIENT_SECRET=""```
+### 4. Lancer le serveur de développement
 
-# Vercel Blob (Optionnel - nécessaire seulement pour l'upload d'images de profil)
+```bash
+npm run dev
+```
 
-    ```BLOB_READ_WRITE_TOKEN=""```
+L'application sera accessible sur **http://localhost:3000**
 
-3. Générer un secret pour NEXTAUTH_SECRET :
+---
 
-   ```openssl rand -base64 32```
+## 🔧 Variables d'environnement optionnelles
 
-   Note: L'authentification OAuth (GitHub/Discord) est optionnelle. Vous pouvez utiliser
-   l'inscription par email/mot de passe sans configurer ces variables.
-
-4. Initialise la base de données :
-
-   ```npx prisma generate```
-
-   ```npx prisma db push```
-
-5. Lance le serveur :
-
-   ```npm run dev```
-
-L'application sera accessible sur http://localhost:3000
-
-Variables d'environnement optionnelles
-
-OAuth (GitHub/Discord)
+### OAuth (GitHub/Discord)
 
 Pour activer la connexion via GitHub ou Discord, créez des applications OAuth :
-- GitHub: https://github.com/settings/developers
-- Discord: https://discord.com/developers/applications
 
-Upload d'images de profil
+- **GitHub :** https://github.com/settings/developers
+- **Discord :** https://discord.com/developers/applications
+
+### Upload d'images de profil
 
 Pour activer l'upload d'images, créez un token Vercel Blob :
-- https://vercel.com/docs/storage/vercel-blob
 
-## Environnements
+- **Vercel Blob :** https://vercel.com/docs/storage/vercel-blob
+
+---
+
+## 🌟 Fonctionnalités
+
+- 🎮 **9 catégories de quiz** (Cinéma, Jeux Vidéo, Histoire, Sport, etc.)
+- 🏆 **Système de classement** avec points et statistiques
+- 👤 **Profils utilisateurs** personnalisables avec avatars
+- 🔐 **Authentification multiple** (Email/Password, GitHub, Discord)
+- 📊 **Historique détaillé** de tous vos quiz
+- 🔍 **Recherche** de catégories
+- 📱 **Design responsive** optimisé mobile et desktop
+- ⚡ **Performance optimale** avec Next.js 15 et React 19
+
+## 🌍 Environnements
 
 - **Local** : SQLite (schema.local.prisma)
 - **Production** : PostgreSQL (schema.prod.prisma)
 
-## Déploiement
-Le projet peut être déployé sur Vercel. Assurez-vous de configurer les variables d'environnement dans le tableau de bord Vercel.
+Le script `scripts/select-schema.ts` sélectionne automatiquement le bon schéma selon l'environnement.
 
-## Lien application prod
-[Quiz App](https://quiz.lucesf.com/)
+---
+
+## 🚢 Déploiement
+
+Le projet est déployé sur Vercel : **[Quiz App](https://quiz.lucesf.com/)**
+
+### Configuration Vercel
+
+1. Connectez votre repository GitHub à Vercel
+2. Configurez les variables d'environnement dans le dashboard Vercel :
+   - `DATABASE_URL` : Votre URL PostgreSQL
+   - `NEXTAUTH_URL` : URL de production
+   - `NEXTAUTH_SECRET` : Secret de production
+   - Variables OAuth (optionnel)
+   - `BLOB_READ_WRITE_TOKEN` (optionnel)
+
+---
+
+## 🐛 Dépannage
+
+### Erreur "NEXTAUTH_SECRET is missing"
+- Assurez-vous d'avoir généré et ajouté un secret avec `openssl rand -base64 32`
+- Vérifiez que le fichier `.env` contient bien `NEXTAUTH_SECRET="votre-secret"`
+
+### La base de données ne se crée pas
+- Vérifiez que le dossier `prisma/` existe
+- Lancez manuellement : `npx prisma db push`
+- Supprimez le dossier `.next` et relancez `npm run dev`
+
+### Erreur de connexion avec credentials
+- Vérifiez que vous avez bien créé un compte avec `npm run dev` → Inscription
+- Les sessions utilisent JWT, assurez-vous que les cookies sont activés
+
+### Les images de profil ne s'uploadent pas
+- Cette fonctionnalité nécessite `BLOB_READ_WRITE_TOKEN`
+- Vous pouvez utiliser l'application sans upload d'images (les initiales s'affichent)
+
+### OAuth ne fonctionne pas
+- Vérifiez que les variables `GITHUB_ID`, `GITHUB_SECRET`, etc. sont correctes
+- Configurez les URLs de callback dans les applications OAuth :
+  - GitHub : `http://localhost:3000/api/auth/callback/github`
+  - Discord : `http://localhost:3000/api/auth/callback/discord`
+
+---
 
 ### Attendus obligatoires :
 - [x] **Routing statique et dynamique**

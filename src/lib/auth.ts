@@ -60,7 +60,7 @@ export const authOptions: NextAuthOptions = {
         })
     ],
     session: {
-        strategy: "database",
+        strategy: "jwt",
         maxAge: 30 * 24 * 60 * 60,
     },
     secret: process.env.NEXTAUTH_SECRET,
@@ -68,9 +68,19 @@ export const authOptions: NextAuthOptions = {
         signIn: "/login",
     },
     callbacks: {
-        async session({ session, user }) {
+        async jwt({ token, user }) {
+            if (user) {
+                token.id = user.id;
+                token.email = user.email;
+                token.name = user.name;
+            }
+            return token;
+        },
+        async session({ session, token }) {
             if (session.user) {
-                session.user.id = user.id;
+                session.user.id = token.id as string;
+                session.user.email = token.email as string;
+                session.user.name = token.name as string | null;
             }
             return session;
         }
