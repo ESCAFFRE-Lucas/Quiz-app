@@ -40,6 +40,9 @@
 ## Déploiement
 Le projet peut être déployé sur Vercel. Assurez-vous de configurer les variables d'environnement dans le tableau de bord Vercel.
 
+## Lien application prod
+[Quiz App](https://quiz.lucesf.com/)
+
 ### Attendus obligatoires :
 - [x] **Routing statique et dynamique**
   - Fait : Utilisation de fichiers dans le dossier `app/` pour les routes statiques et dynamiques
