@@ -10,14 +10,18 @@ import bcrypt from "bcryptjs";
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
-        GithubProvider({
-            clientId: process.env.GITHUB_ID!,
-            clientSecret: process.env.GITHUB_SECRET!,
-        }),
-        DiscordProvider({
-            clientId: process.env.DISCORD_CLIENT_ID!,
-            clientSecret: process.env.DISCORD_CLIENT_SECRET!,
-        }),
+        ...(process.env.GITHUB_ID && process.env.GITHUB_SECRET ? [
+            GithubProvider({
+                clientId: process.env.GITHUB_ID,
+                clientSecret: process.env.GITHUB_SECRET,
+            })
+        ] : []),
+        ...(process.env.DISCORD_CLIENT_ID && process.env.DISCORD_CLIENT_SECRET ? [
+            DiscordProvider({
+                clientId: process.env.DISCORD_CLIENT_ID,
+                clientSecret: process.env.DISCORD_CLIENT_SECRET,
+            })
+        ] : []),
         CredentialsProvider({
             name: "credentials",
             credentials: {

@@ -7,30 +7,51 @@
    git clone https://github.com/ESCAFFRE-Lucas/Quiz-app.git
    cd Quiz-app
    npm install
-   ```
 
-2. Crée un fichier `.env` à la racine :
-   ```
-   DATABASE_URL="file:./dev.db"
-   NEXTAUTH_URL="http://localhost:3000"
-   NEXTAUTH_SECRET="your-secret-here"
-   ```
-   
-    Vous pouvez générer un secret avec la commande suivante :
-    ```bash
-    openssl rand -base64 32
-    ```
+2. Crée un fichier .env à la racine :
+# Base de données (SQLite pour le développement local)
+DATABASE_URL="file:./prisma/dev.db"
 
-3. Initialise la base de données :
-   ```bash
+# NextAuth Configuration
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-here"
+
+# OAuth Providers (Optionnel - laisser vide si vous n'utilisez que email/password)
+GITHUB_ID=""
+GITHUB_SECRET=""
+DISCORD_CLIENT_ID=""
+DISCORD_CLIENT_SECRET=""
+
+# Vercel Blob (Optionnel - nécessaire seulement pour l'upload d'images de profil)
+BLOB_READ_WRITE_TOKEN=""
+
+3. Générer un secret pour NEXTAUTH_SECRET :
+   openssl rand -base64 32
+
+Note: L'authentification OAuth (GitHub/Discord) est optionnelle. Vous pouvez utiliser
+   l'inscription par email/mot de passe sans configurer ces variables.
+
+4. Initialise la base de données :
    npx prisma generate
    npx prisma db push
-   ```
 
-4. Lance le serveur :
-   ```bash
+5. Lance le serveur :
    npm run dev
-   ```
+
+L'application sera accessible sur http://localhost:3000
+
+Variables d'environnement optionnelles
+
+OAuth (GitHub/Discord)
+
+Pour activer la connexion via GitHub ou Discord, créez des applications OAuth :
+- GitHub: https://github.com/settings/developers
+- Discord: https://discord.com/developers/applications
+
+Upload d'images de profil
+
+Pour activer l'upload d'images, créez un token Vercel Blob :
+- https://vercel.com/docs/storage/vercel-blob
 
 ## Environnements
 
